@@ -1,0 +1,54 @@
+﻿<Window x:Class="Garage.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Garage"
+        xmlns:util="clr-namespace:Garage.Util"
+        mc:Ignorable="d"
+        Title="Garázs" Height="450" Width="800">
+    <DockPanel >
+        <GroupBox Header="{Binding SearchGroupHeader}" DockPanel.Dock="Top" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Margin="10 5">Időponttól:</TextBlock>
+                    <DatePicker Height="25" FirstDayOfWeek="Monday" SelectedDateFormat="Short" SelectedDate="{Binding FromDate}"/>
+                    <TextBlock Margin="10 5">Időpontig:</TextBlock>
+                    <DatePicker Height="25" FirstDayOfWeek="Monday" SelectedDateFormat="Short" SelectedDate="{Binding ToDate}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+                    <CheckBox Margin="20 5" IsChecked="{Binding IsByCard}">Bérlet</CheckBox>
+                    <TextBox Width="150" Height="22" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button Command="{Binding SearchCommand}" Margin="10 5">Keresés</Button>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox DockPanel.Dock="Bottom" Height="50" Header="Eredmény Exportálása" Margin="5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Command="{Binding ExportCommand}" CommandParameter="{x:Static util:FileFormat.Csv}" Width="50" Height="25">CSV</Button>
+                <Button Command="{Binding ExportCommand}" CommandParameter="{x:Static util:FileFormat.Xml}" Width="50" Height="25" Margin="20 0">XML</Button>
+                <Button Command="{Binding ExportCommand}" CommandParameter="{x:Static util:FileFormat.Json}" Width="50" Height="25">JSON</Button>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Eredmény" Margin="5 0">
+            <ListView  ItemsSource="{Binding GatekeeperReports}">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="Vevő" DisplayMemberBinding="{Binding Partner}" />
+                        <GridViewColumn Header="Engedmény" DisplayMemberBinding="{Binding Discount, StringFormat=0.00}" />
+                        <GridViewColumn Header="Rendszám" DisplayMemberBinding="{Binding LicensePlate}" />
+                        <GridViewColumn Header="-tól" DisplayMemberBinding="{Binding Begin}" />
+                        <GridViewColumn Header="-ig" DisplayMemberBinding="{Binding End}" />
+                        <GridViewColumn Header="Időtartam" DisplayMemberBinding="{Binding Offset}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+    </DockPanel>
+</Window>
